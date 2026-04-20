@@ -20,7 +20,7 @@ public class WebhookService {
 
     public void executeWorkflow() {
         String name = "Yash Kalkhambkar";
-        String regNo = "REG12347";
+        String regNo = "REG12348";
         String email = "yashkalkhambkar@gmail.com";
 
         log.info("Starting webhook workflow...");
@@ -34,16 +34,14 @@ public class WebhookService {
         int question = determineQuestion(regNo);
         log.info("Selected Question: {}", question);
 
-        String finalQuery = "SELECT p.AMOUNT AS SALARY, " +
-                "CONCAT(e.FIRST_NAME, ' ', e.LAST_NAME) AS NAME, " +
-                "TIMESTAMPDIFF(YEAR, e.DOB, CURDATE()) AS AGE, " +
-                "d.DEPARTMENT_NAME " +
-                "FROM PAYMENTS p " +
-                "JOIN EMPLOYEE e ON p.EMP_ID = e.EMP_ID " +
+        String finalQuery = "SELECT e.EMP_ID, e.FIRST_NAME, e.LAST_NAME, d.DEPARTMENT_NAME, " +
+                "COUNT(e2.EMP_ID) AS YOUNGER_EMPLOYEES_COUNT " +
+                "FROM EMPLOYEE e " +
                 "JOIN DEPARTMENT d ON e.DEPARTMENT = d.DEPARTMENT_ID " +
-                "WHERE DAY(p.PAYMENT_TIME) != 1 " +
-                "ORDER BY p.AMOUNT DESC " +
-                "LIMIT 1";
+                "LEFT JOIN EMPLOYEE e2 ON e.DEPARTMENT = e2.DEPARTMENT " +
+                "AND e2.DOB > e.DOB " +
+                "GROUP BY e.EMP_ID, e.FIRST_NAME, e.LAST_NAME, d.DEPARTMENT_NAME " +
+                "ORDER BY e.EMP_ID DESC";
 
         submitSolution(response.getAccessToken(), response.getWebhook(), finalQuery);
     }
