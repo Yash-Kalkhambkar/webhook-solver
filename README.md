@@ -15,3 +15,9 @@ java -jar target/webhook-solver-0.0.1-SNAPSHOT.jar
 ```
 
 The app runs the full workflow automatically on startup — no manual trigger needed.
+
+To disable the workflow for local testing or dry runs, set:
+
+```bash
+mvn spring-boot:run -Dspring-boot.run.arguments=--app.workflow.enabled=false
+```
