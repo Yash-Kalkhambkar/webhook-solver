@@ -21,3 +21,9 @@ To disable the workflow for local testing or dry runs, set:
 ```bash
 mvn spring-boot:run -Dspring-boot.run.arguments=--app.workflow.enabled=false
 ```
+
+You can also override it with an environment variable:
+
+```bash
+APP_WORKFLOW_ENABLED=false mvn spring-boot:run
+```
